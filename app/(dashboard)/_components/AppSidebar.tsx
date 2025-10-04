@@ -53,7 +53,7 @@ const AppSidebar = () => {
             </SidebarGroupContent>
           </SidebarGroup>
 
-          {userId && <JobSidebarList />}
+          {userId && <JobSidebarList {...{ userId }} />}
 
           {!isSignedIn && isLoaded ? <SignInPrompt /> : null}
         </SidebarContent>
