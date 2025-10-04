@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Onest } from "next/font/google";
+import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
+import { Toaster } from "sonner";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 const onest = Onest({ subsets: ["latin"] });
 
@@ -29,10 +32,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+    <ClerkProvider>
+
     <html lang="en">
       <body className={`bg-white ${onest.className}`} suppressHydrationWarning>
-        {children}
+        <NuqsAdapter>{children}</NuqsAdapter>
+        <Toaster />
       </body>
     </html>
+    </ClerkProvider>
   );
 }

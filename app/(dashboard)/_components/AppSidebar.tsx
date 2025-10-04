@@ -15,8 +15,14 @@ import Link from "next/link";
 import JobSidebarList from "./JobSidebarList";
 import SignInPrompt from "./SignInPrompt";
 import SidebarFooterContent from "./SidebarFooterContent";
+import { useAuth, useUser } from "@clerk/nextjs";
 
 const AppSidebar = () => {
+  const { isSignedIn, user, isLoaded } = useUser();
+  const { signOut } = useAuth();
+
+  const userId = user?.id || null;
+
   return (
     <>
       <Sidebar className="!bg-[rgb(33,33,33)] px-2">
@@ -47,21 +53,26 @@ const AppSidebar = () => {
             </SidebarGroupContent>
           </SidebarGroup>
 
-          <JobSidebarList />
-          <SignInPrompt />
+          {userId && <JobSidebarList />}
+
+          {!isSignedIn && isLoaded ? <SignInPrompt /> : null}
         </SidebarContent>
 
         <SidebarFooter>
           <SidebarFooterContent
-            isSignedIn={true}
-            isLoaded={true}
-            userName={"ShubhamMidgule"}
-            emailAddress={"shubham.midgule17@gmail.com"}
-            userInitial={"SM"}
+            isSignedIn={isSignedIn || false}
+            isLoaded={isLoaded}
+            userName={user?.fullName!}
+            emailAddress={user?.primaryEmailAddress?.emailAddress!}
+            userInitial={user?.firstName?.charAt(0) || ""}
             credits={10}
             loadingCredit={false}
             onUpgradeClick={() => console.log("")}
-            onSignOut={() => console.log("")}
+            onSignOut={() =>
+              signOut({
+                redirectUrl: "/",
+              })
+            }
           />
         </SidebarFooter>
       </Sidebar>
