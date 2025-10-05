@@ -16,6 +16,7 @@ import type {
 import type * as action from "../action.js";
 import type * as apiLimit from "../apiLimit.js";
 import type * as job from "../job.js";
+import type * as jobInsightConversation from "../jobInsightConversation.js";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -29,6 +30,7 @@ declare const fullApi: ApiFromModules<{
   action: typeof action;
   apiLimit: typeof apiLimit;
   job: typeof job;
+  jobInsightConversation: typeof jobInsightConversation;
 }>;
 export declare const api: FilterApi<
   typeof fullApi,

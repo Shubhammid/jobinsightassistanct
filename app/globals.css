@@ -10,15 +10,6 @@ body {
   background-color: rgb(33, 33, 33) !important;
 }
 
-.scrollbar-hide {
-  scrollbar-width: none; 
-  -ms-overflow-style: none; 
-}
-
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
-}
-
 @layer base {
   :root {
     --background: 0 0% 100%;
