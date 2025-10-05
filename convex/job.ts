@@ -3,6 +3,7 @@ import { mutation, query } from "./_generated/server";
 import { CREDIT_COST, FREE_TIER_CREDITS } from "@/lib/api-limits";
 import { JobStatus } from "@/lib/contants";
 import { api, internal } from "./_generated/api";
+import { Id } from "./_generated/dataModel";
 
 export const createJob = mutation({
   args: {
@@ -95,5 +96,19 @@ export const getAllJobs = query({
       .query("jobs")
       .withIndex("by_user", (q) => q.eq("userId", args.userId))
       .collect();
+  },
+});
+
+export const getJob = query({
+  args: {
+    jobId: v.string(),
+  },
+  handler: async (ctx, args) => {
+    try {
+      const jobId = args.jobId as Id<"jobs">;
+      return await ctx.db.get(jobId);
+    } catch (error) {
+      return null;
+    }
   },
 });
