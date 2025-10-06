@@ -17,13 +17,21 @@ import SignInPrompt from "./SignInPrompt";
 import SidebarFooterContent from "./SidebarFooterContent";
 import { useAuth, useUser } from "@clerk/nextjs";
 import { useUpgradeModal } from "@/hooks/use-upgrade-modal";
+import { useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
 
 const AppSidebar = () => {
   const { isSignedIn, user, isLoaded } = useUser();
   const { signOut } = useAuth();
   const { openModal } = useUpgradeModal();
-
   const userId = user?.id || null;
+
+  const apiLimits = useQuery(api.apiLimit.getUserCredits, {
+    userId: user?.id || "",
+  })
+
+  const loadingCredit = apiLimits === undefined;
+  const credits = apiLimits?.credits !== undefined ? apiLimits?.credits : 0;
 
   return (
     <>
@@ -67,8 +75,8 @@ const AppSidebar = () => {
             userName={user?.fullName!}
             emailAddress={user?.primaryEmailAddress?.emailAddress!}
             userInitial={user?.firstName?.charAt(0) || ""}
-            credits={10}
-            loadingCredit={false}
+            credits={credits}
+            loadingCredit={loadingCredit}
             onUpgradeClick={openModal}
             onSignOut={() =>
               signOut({

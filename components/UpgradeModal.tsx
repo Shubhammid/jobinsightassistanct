@@ -11,21 +11,50 @@ import React, { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
 import { Slider } from "./ui/slider";
 import { Button } from "./ui/button";
-import { InfoIcon, Sparkles } from "lucide-react";
+import { InfoIcon, Loader, Sparkles } from "lucide-react";
 import { useSignInModal } from "@/hooks/use-signin-modal";
+import { api } from "@/convex/_generated/api";
+import { useAction } from "convex/react";
+import { ConvexError } from "convex/values";
+import { toast } from "sonner";
+
+const NEXT_PUBLIC_REDIRECT_URL = process.env.NEXT_PUBLIC_REDIRECT_URL!;
 
 const UpgradeModal = () => {
   const { user } = useUser();
   const { isOpen, closeModal } = useUpgradeModal();
   const { open: openSignInModal } = useSignInModal();
   const [selectedCredits, setSelectedCredits] = useState(CREDIT_DEFAULT_VALUE);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const createPayPalOrder = useAction(api.paymentAction.createPaypalOrder);
 
   const totalPrice = selectedCredits * PRICE_PER_CREDIT;
 
-  const onCreateOrder = () => {
+  const onCreateOrder = async () => {
     if (!user) {
       openSignInModal();
       return;
+    }
+    setIsLoading(true);
+    try {
+      const payPalUrl = await createPayPalOrder({
+        amount: totalPrice,
+        userId: user.id,
+        credits: selectedCredits,
+        redirectUrl: NEXT_PUBLIC_REDIRECT_URL,
+      });
+      window.location.href = payPalUrl;
+    } catch (error) {
+      console.log(error);
+      const errorMsg =
+        error instanceof ConvexError
+          ? error.data.message
+          : "Failed to create order";
+
+      toast.error(errorMsg);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -73,7 +102,11 @@ const UpgradeModal = () => {
                       to-purple-600 text-white disabled:opacity-50
                       "
           >
-            Buy ${selectedCredits} Credits for ${totalPrice.toFixed(2)}
+            {isLoading ? (
+              <Loader className="w-4 h-4 animate-spin" />
+            ) : (
+              ` Buy ${selectedCredits} Credits for ${totalPrice.toFixed(2)}`
+            )}{" "}
           </Button>
         </div>
       </DialogContent>
