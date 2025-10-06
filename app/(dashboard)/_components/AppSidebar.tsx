@@ -16,10 +16,12 @@ import JobSidebarList from "./JobSidebarList";
 import SignInPrompt from "./SignInPrompt";
 import SidebarFooterContent from "./SidebarFooterContent";
 import { useAuth, useUser } from "@clerk/nextjs";
+import { useUpgradeModal } from "@/hooks/use-upgrade-modal";
 
 const AppSidebar = () => {
   const { isSignedIn, user, isLoaded } = useUser();
   const { signOut } = useAuth();
+  const { openModal } = useUpgradeModal();
 
   const userId = user?.id || null;
 
@@ -67,7 +69,7 @@ const AppSidebar = () => {
             userInitial={user?.firstName?.charAt(0) || ""}
             credits={10}
             loadingCredit={false}
-            onUpgradeClick={() => console.log("")}
+            onUpgradeClick={openModal}
             onSignOut={() =>
               signOut({
                 redirectUrl: "/",

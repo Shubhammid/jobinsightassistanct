@@ -8,6 +8,7 @@ import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { ConvexError } from "convex/values";
 import { toast } from "sonner";
+import { useUpgradeModal } from "@/hooks/use-upgrade-modal";
 
 interface PropType {
   jobId: string;
@@ -18,7 +19,7 @@ interface PropType {
 const ChatInput = ({ jobId, isDisabled, userId }: PropType) => {
   const [input, setInput] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
+  const { openModal } = useUpgradeModal();
   const textAreaRef = useRef<AutosizeTextAreaRef>(null);
   const sendMessage = useMutation(api.jobInsightConversation.sendUserMessage);
 
@@ -48,7 +49,7 @@ const ChatInput = ({ jobId, isDisabled, userId }: PropType) => {
         error instanceof ConvexError &&
         error?.data?.type === "INSUFFICIENT_CREDITS"
       ) {
-        
+        openModal();
       }
       toast.error(errorMessage);
     } finally {

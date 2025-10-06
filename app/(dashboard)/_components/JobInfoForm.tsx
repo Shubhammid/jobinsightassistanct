@@ -13,11 +13,13 @@ import { useUser } from "@clerk/nextjs";
 import { useSignInModal } from "@/hooks/use-signin-modal";
 import { toast } from "sonner";
 import { ConvexError } from "convex/values";
+import { useUpgradeModal } from "@/hooks/use-upgrade-modal";
 
 const JobInfoForm = () => {
   const router = useRouter();
   const { isSignedIn, user } = useUser();
   const { open: openSignInModal } = useSignInModal();
+  const { openModal } = useUpgradeModal();
 
   const [jobDescription, setJobDescription] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -50,6 +52,7 @@ const JobInfoForm = () => {
         jobDescription: jobDescription,
       });
       if (!response.data && response.requiresUpgrade) {
+        openModal();
         return;
       }
       router.push(`job/${response.data}`);

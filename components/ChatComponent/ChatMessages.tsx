@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import { Loader, MessageSquareTextIcon } from "lucide-react";
 import React, { useMemo } from "react";
 import { Avatar, AvatarFallback } from "../ui/avatar";
+import useScrollToBottom from "@/hooks/use-scroll-bottom";
 
 interface PropType {
   userName: string | null;
@@ -11,6 +12,8 @@ interface PropType {
 
 const ChatMessages = (props: PropType) => {
   const { data, userName } = props;
+  
+  const containerEndRef = useScrollToBottom([data]);
 
   const messages = useMemo(() => {
     if (!data || !data.success) return [];
@@ -101,7 +104,7 @@ const ChatMessages = (props: PropType) => {
       <br />
       <br />
       <br />
-      <div />
+      <div ref={containerEndRef} />
     </div>
   );
 };
