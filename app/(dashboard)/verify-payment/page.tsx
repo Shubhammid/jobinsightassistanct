@@ -75,7 +75,7 @@ const VerifyPayment = () => {
         </p>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default VerifyPayment
+export default VerifyPayment;
