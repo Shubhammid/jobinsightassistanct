@@ -2,7 +2,11 @@
 
 🚀 An AI-powered SaaS platform that delivers intelligent job insights, resume analysis, and personalized career guidance using Gemini AI.
 
+<<<<<<< HEAD
 Built with Next.js 15, Clerk authentication, PayPal payments, and a credit-based usage system — this is a complete real-world SaaS architecture.
+=======
+First, run the development servers:
+>>>>>>> a1eef722e7dcc01a2868d8cf8ad05f3f377d36ca
 
 ---
 
@@ -45,7 +49,7 @@ Built with Next.js 15, Clerk authentication, PayPal payments, and a credit-based
 
 ## 🚀 Deployment Ready
 - Optimized for Vercel  
-- Environment-based configuration  
+- Environment based configuration  
 
 ---
 
